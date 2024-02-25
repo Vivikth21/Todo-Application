@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import express from "express";
 import mongoose from "mongoose";
@@ -16,5 +18,6 @@ app.use("/todo", todoRoutes);
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
+const uri = process.env.MONGODB_URI as string;
 
-mongoose.connect('mongodb://localhost:27017/courses', { dbName: "courses" });
+mongoose.connect(uri, { dbName: "todos" });

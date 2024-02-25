@@ -1,16 +1,22 @@
 import jwt from "jsonwebtoken";
 import express from 'express';
-import { authenticateJwt, SECRET } from "../middleware/";
+import { authenticateJwt, SECRET } from "../middleware";
 import { User } from "../db";
-import { signupInput } from "@100xdevs/common"
+// import { signupInput } from "@100xdevs/common"
+import { z } from "zod"
 
 const router = express.Router();
+
+let signupInput = z.object({
+  username: z.string().min(1).max(10),
+  password: z.string().min(1).max(10)
+})
 
 router.post('/signup', async (req, res) => {
     let parsedInput = signupInput.safeParse(req.body)
     if (!parsedInput.success) {
       return res.status(403).json({
-        msg: "error"
+        msg: parsedInput.error
       });
     }
     const username = parsedInput.data.username 
